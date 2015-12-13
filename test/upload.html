@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>图片上传</title>
+    <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+    <script type="text/javascript" src="js/uploadPicture/mobileBUGFix.mini.js" ></script>
+    <script type="text/javascript" src="js/uploadPicture/uploadImage.js" ></script>
+        <script type="text/javascript" src="js/exif.js" ></script>
+</head>
+<body>
+	<div style="height: 50px; line-height: 50px;text-align: center;border-bottom: 1px solid #171E28;">
+			上传图片:
+			<input type="file" accept="image/*" id="uploadImage" capture="camera" onchange="selectFileImage(this);" />
+		</div>
+		<div style="margin-top: 10px;">
+			<img alt="preview" src="" id="myImage"/>
+		</div>
+		<canvas id="canvas" width="255" height="350"></canvas>
+</body>
+</html>

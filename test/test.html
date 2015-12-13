@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+</head>
+<body>
+	<input type="file" accept="image/*" capture="camera" id="file">
+	<canvas id="canvas" width="255" height="350"></canvas>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../js/exif.js" ></script>
+	 <script type="text/javascript" src="../js/mobileBUGFix.mini.js" ></script>
+	<script>
+	var f = document.getElementById('file');
+	f.addEventListener('change', function(){
+		var imgfile = f.files[0];
+		var  Orientation;
+        if(!/image\/\w+/.test(imgfile.type)) {
+            alert("请确保文件类型为图像类型");
+            return false;
+        }
+        EXIF.getData(imgfile, function() {
+		   // alert(EXIF.pretty(this));
+		    EXIF.getAllTags(this); 
+		    //alert(EXIF.getTag(this, 'Orientation')); 
+		    Orientation = EXIF.getTag(this, 'Orientation');
+		    //return;
+		});
+		alert(Orientation)
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        var reader = new FileReader();
+        reader.readAsDataURL(imgfile);
+        reader.onload = function(e){
+        	var image = new Image();
+        	image.src = e.target.result;
+        	image.onload = function(){
+        		ctx.drawImage(image,0,0,canvas.width,canvas.height);
+        	}
+        }
+	}, false);
+	</script>
+</body>
+</html>
