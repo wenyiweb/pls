@@ -171,7 +171,7 @@
 	<div class="upload-page ab">
 		<div class="xk ab">
 			<div class="content content1 ab">
-				<input type="file" id='file' class="file ab" accept="image/*" capture="camera">
+				<input type="file" id='file' class="file ab" accept="image/*" capture="camera" >
 				<div type="file" class='file ab'></div>
 				<img src="" id="cc">
 				<canvas id="canvas" width="510" height="700"></canvas>
@@ -187,7 +187,9 @@
 	<div id="dialog">
 		<a href="javascript:;" class="close" onClick="$('.phone').hide();$('.hand-tip,.zzdj').addClass('zz');$('#iframe').fadeOut(100,function(){$(window).scrollTop(0);$('#dialog').fadeOut(300,function(){$('#iframe').show();})});"></a>
 		<div class="dialog-tip"></div>
-		<iframe id="iframe" src="" width="420" height="716" scrolling="yes" frameborder="0"></iframe>
+		<div class="ifcontent">
+			<iframe id="iframe" src="" width="100%" height="100%" scrolling="yes" frameborder="0"></iframe>
+		</div>
 	</div>
 	<!--背景音乐
 	<div class="audio">

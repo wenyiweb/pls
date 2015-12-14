@@ -1,6 +1,3 @@
-//var IMG_PATH = 'http://192.168.55.114/my/vaseline/';
-var IMG_PATH = '';//资源文件地址
-var filelist = ['images/bg.jpg','images/star.png','images/award.png','images/y1.png','images/y2.png','images/y3.png','images/y4.png','images/y5.png','images/y6.png','images/y7.png','images/light.png','images/brands.png','images/bigbg.jpg','images/tip.png','images/cloud.png','images/cup2.png','images/vaseline_3.png','images/pb.jpg','images/vt.png','images/lk.png','images/k.png','images/kl.png','images/button.png','images/pst.png','images/share.png'];
 var audio;
 var canv;
 var swiper;
@@ -145,29 +142,118 @@ function initSwiper(){
 		}
 	});
 }
-$('#swiper').addClass('out');
+/*$('#swiper').addClass('out');
 $('.upload-page').addClass('in');
 $('.upload-page').one('webkitTransitionEnd',function(){
 	$('#swiper').hide();
 });
-createImg();
+createImg();*/
 function createImg(){
 	$('.sharebtn').on('click',function(){
 		$('.shareDiv').fadeIn();
 	})
-	$('#file').on('change',function(){
-		var simpleFile = document.getElementById("file").files[0];
-        if(!/image\/\w+/.test(simpleFile.type)) {
+	var f = document.getElementById('file');
+	var data = ['','images/canv.png'];
+	f.addEventListener('change', function(){
+		var imgfile = f.files[0];
+		if(!/image\/\w+/.test(imgfile.type)) {
             alert("请确保文件类型为图像类型");
             return false;
         }
-        $('.file').fadeOut();
-        canvasFn(simpleFile);
-	});
+        oriImg(imgfile);
+	}, false);
+	function oriImg(imgfile){
+		$('.file').fadeOut();
+		var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+		var  Orientation;
+        EXIF.getData(imgfile, function() {
+		    EXIF.getAllTags(this); 
+		    Orientation = EXIF.getTag(this, 'Orientation');
+		});
+        var reader = new FileReader();
+        reader.readAsDataURL(imgfile);
+        reader.onload = function(e){
+        	var image = new Image();
+	    	image.src = this.result;
+	    	image.onload = function(){
+	    		var base64 = null;
+				var mpImg = new MegaPixImage(image);
+					mpImg.render(canvas, {
+						maxWidth: 510,
+						maxHeight: 700,
+						quality: 0.75,
+						orientation: Orientation
+					});
+				
+				var base64 = canvas;//canvas.toDataURL("image/jpeg", 1);
+				data[0] = base64;
+				draw();
+				//canvasEvent();
+	    	}
+        }
+	}
+	function draw(x,y){
+		var c=document.getElementById('canvas'),
+			ctx=c.getContext('2d'),
+			len=data.length;
+		var x = x||0;
+		var y = y||0;
+		var base64;
+		//ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.clearRect(0,0,c.width,c.height);
+		ctx.fillStyle='#fff';
+		ctx.fill();
+		/*var img=new Image;
+		img.src=data[1];
+		img.onload=function(){
+			ctx.drawImage(img,0,0,c.width,c.height);
+		}*/
+		function drawing(n){
+			if(n == 0){
+				ctx.drawImage(data[0],x,y,c.width,c.height);
+				drawing(1);
+			}else if(n == 1){
+				var img=new Image;
+				img.src=data[n];
+				img.onload=function(){
+					ctx.drawImage(img,0,0,c.width,c.height);
+					drawing(2);
+				}
+			}else{
+				//保存生成作品图片
+				base64 = c.toDataURL("image/jpeg",1);
+				$('.sharebtn').fadeIn();
+				//uploadPic(JSON.stringify(base64))
+				//fn();
+			}
+		}
+		drawing(0);
+	}
+	function canvasEvent(){
+		var cc = document.getElementById('canvas');
+		var left = 0,top = 0;
+		cc.addEventListener('touchstart', function(e){
+			var startX = 0,startY = 0,currentX = 0,currentY = 0,move = false;
+			startX = e.touches[0].pageX - left;
+			startY = e.touches[0].pageY - top;
+			move = true;
+			cc.addEventListener('touchmove', function(ev){
+				left = ev.touches[0].pageX - startX;
+				top = ev.touches[0].pageY - startY;
+				setTimeout(function(){
+					draw(left,top);
+				},10);
+			}, false);
+		}, false);
+	}
 }
 
 
-
+//废弃
 function canvasFn(simpleFile){
 	var base64 = '';
 	var canvas = document.getElementById('canvas'),
@@ -208,36 +294,8 @@ function canvasFn(simpleFile){
 	}
 	drawing(0);
 }
-function exifImg(){
-	var expectWidth = this.naturalWidth;
-	var expectHeight = this.naturalHeight;
 	
-	if (this.naturalWidth > this.naturalHeight && this.naturalWidth > 800) {
-		expectWidth = 800;
-		expectHeight = expectWidth * this.naturalHeight / this.naturalWidth;
-	} else if (this.naturalHeight > this.naturalWidth && this.naturalHeight > 1200) {
-		expectHeight = 1200;
-		expectWidth = expectHeight * this.naturalWidth / this.naturalHeight;
-	}
-	alert(expectWidth+','+expectHeight);
-	var canvas = document.createElement("canvas");
-	var ctx = canvas.getContext("2d");
-	canvas.width = expectWidth;
-	canvas.height = expectHeight;
-	ctx.drawImage(this, 0, 0, expectWidth, expectHeight);
-	alert(canvas.width+','+canvas.height);
 	
-	var base64 = null;
-	var mpImg = new MegaPixImage(image);
-		mpImg.render(canvas, {
-			maxWidth: 800,
-			maxHeight: 1200,
-			quality: 0.8,
-			orientation: Orientation
-		});
-		
-	base64 = canvas.toDataURL("image/jpeg", 0.8);
-}
 function uploadPic(){
 	$.ajax({
 	  type: "POST",
