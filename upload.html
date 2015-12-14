@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>upload</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+</head>
+<body>
+	<button id="upload">上传图片</button>
+	<script src="http://www.h5super.com/pls/js/jquery.js"></script>
+	<script>
+	$('#upload').on('click',uploadPic);
+	function uploadPic(){
+		$.ajax({
+		  type: "POST",
+		  url: "savePic.php?rand="+Math.random() ,
+		  data: {
+			imgBase64: imgString 
+		  }
+		}).done(function(o) {
+			var obj = $.parseJSON(o);
+			if(obj.status){ //成功
+				successFn(obj.msg);//id,url
+			}else{ //失败
+				alert(obj.msg);
+				failFn();
+			}
+		});	
+	    //成功  根据返回的图片地址替换分享url
+	    function successFn(img){
+	    	shareData.link = window.location.origin + window.location.pathname + '?fimg='+img+'&fname='+$('#nickName').val()+'&fmobile='+$('#phone').val(); 
+			$('.share').fadeIn();
+	    }
+	    //失败
+	    function failFn(){
+	    	subf = true;
+	    	$('#submitForm').html('提交');
+	    }
+
+	}
+	</script>
+</body>
+</html>
