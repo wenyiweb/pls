@@ -56,13 +56,15 @@
 	</div>
 	<div class="swiper-container" id="swiper">
 		<div class="swiper-wrapper">
-			<div class="swiper-slide" id="cover">	
+			<div class="swiper-slide swiper-no-swiping" id="cover">	
 				<div class="dm ab">
 					<img src="images/1-1.png" alt="">
 				</div>			
 				<div class="bg1 ab">
 					<img src="images/1-2.png" alt="">
 				</div>
+				<img src="images/j1.png" style="position: absolute;left: -418px;top: -40px;z-index:2;">
+				<img src="images/j2.png"  style="position: absolute;left:80px;top: 0px;-webkit-transform:translate(-1400px,0);z-index:1;">
 				<div class="tip ab"></div>
 			</div>
 			<div class="swiper-slide swiper-no-swiping" id="page1">	
@@ -173,8 +175,8 @@
 			<div class="content content1 ab">
 				<input type="file" id='file' class="file ab" accept="image/*" capture="camera" >
 				<div type="file" class='file ab'></div>
-				<img src="" id="cc">
-				<canvas id="canvas" width="510" height="700"></canvas>
+				<img src="" id="cc" style="max-width:100%;">
+				<!-- <canvas id="canvas" width="510" height="700"></canvas> -->
 			</div>
 		</div>
 		<div class="sharebtn"></div>
@@ -202,10 +204,11 @@
 		<audio src="media/m4.mp3" preload="auto" id="m4"></audio>
 	</div>-->
 	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script src="http://cdn.bootcss.com/hammer.js/2.0.4/hammer.js"></script>
 	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/zepto.min.js"></script>
 	<script type="text/javascript" src="js/exif.js" ></script>
 	 <script type="text/javascript" src="js/mobileBUGFix.mini.js" ></script>
-	<script type="text/javascript" _src="js/iscroll.js"></script>
 	<script type="text/javascript" src="js/swiper.js"></script>
 	<script type="text/javascript" src="js/app.js"></script>
 	<script>

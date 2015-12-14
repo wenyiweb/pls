@@ -1,22 +1,7 @@
-//var IMG_PATH = 'http://192.168.55.114/my/vaseline/';
-var IMG_PATH = '';//资源文件地址
-var filelist = ['images/bg.jpg','images/star.png','images/sprite.png','images/light.png','images/brands.png','images/bigbg.jpg','images/tip.png','images/cloud.png','images/cup2.png','images/vaseline_3.png','images/pb.jpg','images/vt.png','images/lk.png','images/k.png','images/kl.png','images/button.png','images/pst.png','images/share.png'];
-function loadFn(files, process, complete){
-    var loader = new PxLoader();
-    for(var i=0;i<files.length;i++){
-        loader.addImage(IMG_PATH+files[i]);
-    }
-    if(process) process(0);
-    loader.addProgressListener(function(e){
-        var percent = Math.round( e.completedCount / e.totalCount * 100 );
-        if(process) process(percent);
-    });
-    loader.addCompletionListener(function(e){
-        if(complete) complete();
-    });
-    loader.start();
-}
-
+var audio;
+var canv;
+var swiper;
+var transform;
 function fade(id,type,cb){
     var ele = document.querySelector(id);
     if(type == 'out'){
@@ -36,538 +21,687 @@ function fade(id,type,cb){
         ele.removeEventListener('webkitTransitionEnd', arguments.callee);
     } ,false);
 }
-/**
- * 云层处理
- * @return {[type]} [description]
- */
-function coverFn(){
-    
-    var count = 0;
-    $('.yun-content').on('touchmove',function(e){
-        e.preventDefault();
-        $('.yun-content .yun').addClass('on');
-        $('.yun-content .yun5').one('webkitTransitionEnd',function(){
-            $('.yun-content').hide();
-            brandsFn();
-        })
-        /*if(count == 0){
-            $('.yun-content .yun3').addClass('on');
-            $('.yun-content .yun3').one('webkitTransitionEnd',function(){
-                count = 1;
-            })
-        }
-        if(count == 1){
-            $('.yun-content .yun4').addClass('on');
-            $('.yun-content .yun4').one('webkitTransitionEnd',function(){
-                count = 2;
-            })
-        }
-        if(count == 2){
-            $('.yun-content .yun2,.yun-content .yun6').addClass('on');
-            $('.yun-content .yun2').one('webkitTransitionEnd',function(){
-                count = 3;
-            })
-        }
-        if(count == 3){
-            $('.yun-content .yun7').addClass('on');
-            $('.yun-content .yun7').one('webkitTransitionEnd',function(){
-                count = 4;
-            })
-        }
-        if(count == 4){
-            $('.yun-content .yun5,.yun-content .yun1').addClass('on');
-            $('.yun-content .yun5').one('webkitTransitionEnd',function(){
-                count =5;
-                $('.yun-content').hide();
-                brandsFn();
-            })
-        }*/
-    })
-}
-/**
- * 品牌处理
- * @return {[type]} [description]
- */
-function brandsFn(){
-    $('.brands,.cover .logo').addClass('on');
-    $('.cover .logo').one('webkitTransitionEnd',function(){
-        setTimeout(function(){
-            $('.cover,.or').addClass('out');
-            $('.search-page').show();
-            setTimeout(function(){
-                $('.or').hide();
-                $('.search-page .cloud,.search-page .cup,.search-page .tip,.us').addClass('on');
-            },3000);
-            
-        },1000);
-    })
-    searchPageFn();
-    //searchPageFn.init();
-}
-/**
- * 寻找最亮的星
- * @return {[type]} [description]
- */
-/* start: function(e) {
-    var touch = e.touches[0];
-    startX = touch.pageX;
-    startY = touch.pageY;
-    time = +new Date().getTime();
-
-    wrap[0].addEventListener('touchmove', pageAPI.move, false);
-},
-move: function(e) {
-    var touch = e.touches[0];
-    endX = touch.pageX - startX;
-    endY = touch.pageY - startY;
-
-    wrap[0].addEventListener('touchend', pageAPI.end, false);
-},
-end: function(e) {
-    time = +new Date().getTime() - time;
-    if ((time > 100) && Math.abs(endY) > Math.abs(endX)) {
-        if (endY < 0) {
-            wrap.animate({
-                '-webkit-transform': 'translate3d(0px, -100%, 0px)',
-                '-webkit-transition': '-webkit-transform 0.4s ease-in-out 0s;',
-                'transition': '-webkit-transform 0.4s ease-in-out 0s'
-            }, 0.4, 'ease-in-out');
-            setTimeout(function() {
-                setThemeText();
-            }, 500);
-        }
+function  load(cb){
+  var _load = document.querySelector('.loading'),
+    per = _load.querySelector('.loadingpercent'),
+    logo = document.querySelector('.loading .logo'),
+    timer,
+    src = 'images/bg.jpg',
+    img = new Image();
+    logo.addEventListener('webkitTransitionEnd',function(){
+        if(timer) return;
+        timer = setTimeout(function(){
+          num();
+          timer = null;
+        },300)
+      },false)
+  var n = 5,t;
+  function num(){
+    n++;
+    if(document.readyState == 'complete'){
+      clearTimeout(t);
+      t= null;
+      per.innerHTML = 100 + '%';
+      // start
+      setTimeout(function(){
+        hide()
+      },1000)
+      return;
     }
-    wrap[0].removeEventListener('touchmove', pageAPI.move, false);
-    wrap[0].removeEventListener('touchend', pageAPI.end, false);
-},*/
-/*var startX = 0,
-    startY = 0,
-    endX = 0,
-    endY = 0,
-    time = 0,
-    index = 0,
-    rX = 0,
-    rY = 0;
-    stage = document.querySelector('.search-page'),
-    bg = document.querySelector('.search-page .bg');
-var searchPageFn = {
-     X:0,
-     Y:0,
-     start: function(e) {
-        var touch = e.touches[0];
-        startX = touch.pageX;
-        startY = touch.pageY;
-        searchPageFn.X = $(bg).offset().left;
-        searchPageFn.Y = $(bg).offset().top
-        time = +new Date().getTime();
-
-       stage.addEventListener('touchmove', searchPageFn.move, false);
-    },
-    move: function(e) {
-        var touch = e.touches[0];
-        endX = touch.pageX - startX;
-        endY = touch.pageY - startY;
-        rX = searchPageFn.X + endX + 960;
-        rY = searchPageFn.Y + endY + 1704;
-        if(rX>900){
-            if(rY>1700){
-                rX = 900;
-                rY = 1700;
-            }else if(rY<-700){
-                rX = 900;
-                rY = -700;
-            }else{
-                rX = 900;
-            }
-        }else if(rX<-300){
-            if(rY>1700){
-                rX = -300;
-                rY = 1700;
-            }else if(rY<-700){
-                rX = -300;
-                rY = -700;
-            }else{
-                rX = -300;
-            }
-        }else{
-            if(rY>1700){
-                rY = 1700;
-            }else if(rY<-700){
-                rY = -700;
-            }
-        }
-        stage.addEventListener('touchend', searchPageFn.end, false);
-    },
-    end: function(e) {
-        time = +new Date().getTime() - time;
-        if ((time > 100) /*&& Math.abs(endY) > Math.abs(endX)*/) {
-            //if (endY < 0) {
-                $(bg).css({
-                    '-webkit-transform': 'translate3d('+rX+'px, '+rY+'px, 0px)',
-                    '-webkit-transition': '-webkit-transform 0.4s ease-in-out 0s;',
-                    'transition': '-webkit-transform 0.4s ease-in-out 0s'
-                });
-           // }
-        }
-        stage.removeEventListener('touchmove', searchPageFn.move, false);
-        stage.removeEventListener('touchend', searchPageFn.end, false);
-    },
-    init:function(){
-        stage.addEventListener('touchstart',searchPageFn.start,false);
-        $('.vaseline').on('tap',function(e){
-            e.preventDefault();
-            $(this).fadeOut();
-            $('.vaseline_tip').fadeOut();
-            $('.vaseline_logo').hide().css('opacity',1).fadeIn(function(){
-                //clearInterval(interval);
-                setTimeout(function(){
-                    fade('.search-page','out');
-                    fade('#swiper','in',scanFn)
-                    /*$('.search-page').fadeOut('800');
-                    $('#swiper').fadeIn('800',function(){
-                        scanFn();
-                    });*/
-                },2000);
-            });
-        });
+    per.innerHTML = n + '%';
+    if(n==90){
+      n--;
     }
+    t = setTimeout(num,100)
+  }
 
-}*/
-function searchPageFn(){
-    var stage = document.querySelector('.search-page');
-    var bg = document.querySelector('.search-page .bg');
-    //var us = document.querySelector('.search-page .us');
-    var curX = 0,curY = 0,rX = 0,rY = 0,uX = 0,uY = 0;
-    stage.addEventListener('touchstart', function(event){
-        event.preventDefault();
-        $('.tip').hide();
-        var X = $(bg).offset().left,Y = $(bg).offset().top,
-    //  X2 = $(us).offset().left,Y2 = $(us).offset().top,
-            startX = event.touches[0].clientX,startY = event.touches[0].clientY;
-        stage.addEventListener('touchmove',function(event){
-            event.preventDefault();
-            var ev = event.touches[0];
-            var curX = ev.clientX - startX;
-            var curY = ev.clientY - startY;
-            rX = X + curX + 960;
-            rY = Y + curY + 1704;
-           /* uX = X2 + curX + 960*2;
-            uY = Y2 + curY + 1704*2;*/
-            if(rX>900){
-                if(rY>1700){
-                    rX = 900;
-                    rY = 1700;
-                }else if(rY<-700){
-                    rX = 900;
-                    rY = -700;
-                }else{
-                    rX = 900;
-                }
-            }else if(rX<-300){
-                if(rY>1700){
-                    rX = -300;
-                    rY = 1700;
-                }else if(rY<-700){
-                    rX = -300;
-                    rY = -700;
-                }else{
-                    rX = -300;
-                }
-            }else{
-                if(rY>1700){
-                    rY = 1700;
-                }else if(rY<-700){
-                    rY = -700;
-                }
-            }
-           /* console.log('1.===='+rX+"::"+uX)
-            if(uX < 0){
-                uX=0;
-            }
-            if(uY < 0){
-                uY = 0;
-            }
-            console.log('2.===='+rX+"::"+uX)*/
-            setTimeout(function(){
-                $(bg).stop().animate({'left':rX,'top':rY},300);
-                //$(bg).css({'left':rX,'top':rY});
-                //$(us).css({'left':uX,'top':uY});
-            },10);
-        },false)
-    },false);
-
-    $('.vaseline').on('tap',function(e){
-        e.preventDefault();
-        $(this).fadeOut();
-        $('.vaseline_tip').fadeOut();
-        $('.vaseline_logo').hide().css('opacity',1).fadeIn(function(){
-            //clearInterval(interval);
-            setTimeout(function(){
-                fade('.search-page','out');
-                fade('#swiper','in',scanFn)
-                /*$('.search-page').fadeOut('800');
-                $('#swiper').fadeIn('800',function(){
-                    scanFn();
-                });*/
-            },2000);
-        });
+  function hide(){
+    fade('.loading','out',function(){
+        cb&&cb();
     });
-    /*$('.vaseline_logo').on('tap',function(e){
-        e.preventDefault();
-        $('.search-page').fadeOut();
-        $('.scan').fadeIn(function(){
-            scanFn();
-        });
-    })*/
+  }
+  img.onload = function(){
+    _load.classList.add('on');
+  }
+  img.src = src;
 }
-/**
- * 扫描
- * @return {[type]} [description]
- */
-function scanFn(){
-//  slightMovement.initSlightMovement();
-    productFn();
-    var count = 0,blur = 28;
-    /*$('.explore').on('click',function(){
-        $(this).fadeOut();
-        $('.scan-box,#product,.main').addClass('on');
-        $('.kl').one('webkitAnimationEnd',function(){
-            $('.scan').fadeOut();
-            $('#product .title').addClass('on');
-            $('.view').fadeIn();
-            $('.arrow').fadeIn();
-            $('#scan-product').removeClass('swiper-no-swiping');
-        });
-        
-    })*/
-}
-function productFn(){
-    //$('#swiper').fadeIn();
-    var swiper = new Swiper('#swiper',{
-        direction :"vertical",
-        speed:250,
+function initSwiper(){
+    swiper = new Swiper("#swiper",{
+        derection:'vertival',
+        allowSwipeToPrev:false,
         initialSlide:0,
         slideActiveClass:'on',
-        touchMoveStopPropagation:false,         
-        mousewheelControl: true,
-        keyboardControl: true,
-        onSlideChangeEnd : function(){
+        touchMoveStopPropagation:false,
+        onInit:function(){
+            $('#cover').addClass('first');
         }
     });
-    $('.view').on('tap',function(){
-        $('#product').addClass('swiper-no-swiping');
-        $('.reason').addClass('on');
+    $('#page1 .ms.ms2').one('webkitTransitionEnd',function(){
+        $('#page1 .tip').fadeIn();
+        $('#page1').removeClass('swiper-no-swiping');
     });
-    $('.reason .close').on('tap',function(){
-        $('#product').removeClass('swiper-no-swiping');
-        $('.reason').removeClass('on');
-    })
-    $('.wishbtn').on('click',function(){
-        //$('#wish').addClass('animate');
-        wishFn();
-    })
-}
-//报名
-function addUser(){
-    var url = "http://www.cosmopolitan.com.cn/files/eventapi.php?c=EventApiNew&a=AddEvent&indexsId=617";  
-
-    var data = { 
-        "data[2473]": "13031652389",//手机 
-        "data[2474]": "kevin",//真实姓名 
-        "data[2475]": "test wish",//願望
-    };
-    $.ajax({
-        url:url,
-        data:data,
-        type:"GET",
-        success:function(reqData){
-            console.log(reqData)
-        }
-    });
-}
-function wishFn(){
-    $('#wish').addClass('animate');
-    $('.wishtitle,.form').hide();
-    var btnh = $(window).height() - $('#wish .bs').offset().top - $('#wish .wishbtn').height();
-    $('#wish .logo').css({
-        '-webkit-transform':'translate3d(0,'+($(window).height() - $('#wish .logo').height())+'px,0)'
-    });
-    $('#wish .wishbtn').css({
-        '-webkit-transform':'translate3d(0,-'+btnh+'px,0) scale(0.5)',
-        'opacity':0
-    });
-    $('#wish .logo').one('webkitTransitionEnd',function(){
-        fade('#wish .wishbtn','out',function(){
-            $('#wish .bs').addClass('on')
+    //点击图片swiper-no-swiping
+    $('#page2 .content1').one('tap',function(){
+        $('#page2 .content1').addClass('out');
+        $('#page2 .content1 .dp').one('webkitTransitionEnd',function(){
+            $('#page2 .tip2').fadeOut();            
+            $('#page2 .content1 .girl').fadeOut(function(){
+                $('#page2 .content1').hide();
+            });
         })
-        /*$('#wish .wishbtn').fadeOut('300',function(){
-            $('#wish .bs').addClass('on')
-        });*/
+        $('#page2 .content2').addClass('in');
+        $('#page2 .ms.ms3').one('webkitTransitionEnd',function(){
+            $('#page2 .tip').fadeIn();
+            $('#page2').removeClass('swiper-no-swiping');
+        })
     });
-    $('#wish .bs').one('webkitTransitionEnd',function(){
-        //$('#wish .bs').fadeOut('300');
-        $('#wish .bs').removeClass('on');
+    //点击图片swiper-no-swiping
+    $('#page3 .content1').one('tap',function(){
+        $('#page3 .content1').addClass('out');
+        $('#page3 .content1 .dp').one('webkitTransitionEnd',function(){
+            $('#page3 .tip2').fadeOut();            
+            $('#page3 .content1 .girl').fadeOut(function(){
+                $('#page3 .content1').hide();
+            });
+        })
+        $('#page3 .content2').addClass('in');
+        $('#page3 .ms.ms4').one('webkitTransitionEnd',function(){
+            $('#page3 .tip').fadeIn();
+            $('#page3').removeClass('swiper-no-swiping');
+        })
+    });
+    //电话铃声
+    $('#page4 .ms.ms4').one('webkitTransitionEnd',function(){
         setTimeout(function(){
-            $('#wish .lx3').addClass('on');
-        },200);             
+            $('#cwpb,#page4 .mscontent').css('opacity',0);
+            $('.hand-tip').addClass('on');
+            $('#cwpb').one('webkitTransitionEnd',function(){
+                $('.phone').addClass('on');
+            })
+        },1000);
     });
-    $('#wish .lx3').one('webkitTransitionEnd',function(){
-        $('#wish .lx3').css('-webkit-transform','translate3d(-540px,600px,0)');
-        $('#wish .lx3').one('webkitTransitionEnd',function(){
-            $('#wish .share').fadeIn();
-        })
-    });
-}   
-function fontSize()
-{
-    var view_width = document.getElementsByTagName('html')[0].getBoundingClientRect().width;
-
-    var _html = document.getElementsByTagName('html')[0];
-
-    if (view_width > 640)
-    {
-        _html.style.fontSize = 640 / 16 + 'px';
-    }
-    else
-    {
-        _html.style.fontSize = view_width / 16 + 'px';
-    }
-}
-//左右移动slightMovement.ismove
-    var slightMovement = {
-        ismove:true,
-        x:0,
-        y:0,
-        lastX:0,
-        lastY:0,
-        initSlightMovement:function(){
-            var h = window.screen.width > window.screen.height ? window.screen.width : window.screen.height;
-            if (window.DeviceMotionEvent /**&& ! navigator.userAgent.match(/Android/i) && h >= 568**/) { 
-                slightMovement.addEvent(window,"devicemotion",slightMovement.deviceMotionHandler);
-            }
-        },
-        addEvent:function(obj,type,fn){
-            if(obj.attachEvent){
-                obj['e' + type +fn] = fn;
-                obj[type+fn] = function(){
-                    obj['e' + type + fn](window.event);
-                }
-                obj.attachEvent("on" + type,obj[type+fn]);
-            }else{
-                obj.addEventListener(type,fn,false);
-            }
-        },
-        removeEvent:function(obj,type,fn){
-            if ( obj.detachEvent ) { 
-                obj.detachEvent( 'on'+type, obj[type+fn] ); 
-                obj[type+fn] = null; 
-              } else {
-                obj.removeEventListener( type, fn, false ); 
-              }
-                
-        },
-        deviceMotionHandler:function(eventData){
-            if (slightMovement.ismove) {
-            var acceleration = eventData.accelerationIncludingGravity;
-            var facingUp = -1;
-            if (acceleration.z > 0) {
-                facingUp = +1;
-            }
-            var LR = Math.round(((acceleration.x) / 9.81) * -180);
-            $('#rr').html(((acceleration.x) / 9.82) * -180)
-            if(navigator.userAgent.match(/Android/i)){
-                     if(LR < -20 ){
-                         LR = LR < -40 ? -40 : LR;
-                        $("#ps").stop().animate({"left":-40},600);
-                     }else if(LR > 20 ){
-                          LR = LR > 40 ? 40 : LR;
-                        $("#ps").stop().animate({"left":40},600);
-                     }else{
-                        $("#ps").stop().animate({"left":0},600);
-                     }
-                }else{
-                     if(LR < -10 ){
-                         LR = LR < -40 ? -40 : LR;
-                        $("#ps").stop().animate({"left":-LR},300);
-                     }else if(LR > 15 ){
-                          LR = LR > 40 ? 40 : LR;
-                        $("#ps").stop().animate({"left":-LR},300);
-                     }else{
-                        $("#ps").stop().animate({"left":-LR},300);
-                     }
-                }
-
-        } else {
-            $("#ps").stop();
+    $('.phone').on('click',function(){
+        if($(this).hasClass('on')){
+            $('#cwpb2').css('opacity',0);
+            $('#cwpb2').one('webkitTransitionEnd',function(){
+                $('#dialog').fadeIn(function(){
+                    setTimeout(function(){
+                        $('.dialog-tip').fadeIn();
+                    },2000)
+                });
+            });
         }
-            /*if(slightMovement.ismove){
-                 var acceleration = eventData.accelerationIncludingGravity; 
-                    this.x = acceleration.x;
-                    this.y = acceleration.y;
-                   // this.z = acceleration.z;
-
-           //     if(Math.abs(x-lastX) > speed || Math.abs(y-lastY) > speed || Math.abs(z-lastZ) > speed) {
-                    //简单的摇一摇触发代码
-                  //  alert(acceleration.z);
-            //    }
-                this.lastX = x;
-                this.lastY = y;
-                //this.lastZ = z;
-                 if (acceleration.z > 0) { 
-                    facingUp = +1; 
-                 }      
-                 var LR = Math.round(((acceleration.x) / 9.82) * -180); 
-                $('#rr').html(((acceleration.x) / 9.82) * -180)
-                if(LR < -50 ){
-                    LR = LR < -50 ? -50 : LR;
-                    $("#ps").stop().animate({"left":-LR*2},300);
-                }else if(LR > 50 ){
-                    LR = LR > 50 ? 50 : LR;
-                    $("#ps").stop().animate({"left":-LR*2},300);
-                }else{
-                    $("#ps").stop().animate({"left":-LR*2},300);
-                }
+    });
+    $('.zzdj').on('click',function(){
+        if($(this).hasClass('zz')){
+            $('#swiper').addClass('out');
+            $('.upload-page').addClass('in');
+            $('.upload-page').one('webkitTransitionEnd',function(){
+                $('#swiper').hide();
+            });
+            createImg();
+        }
+    });
+}
+/*$('#swiper').addClass('out');*/
+$('.upload-page').addClass('in');
+$('.upload-page').one('webkitTransitionEnd',function(){
+    $('#swiper').hide();
+});
+createImg();
+function createImg(){
+    $('.sharebtn').on('click',function(){
+        $('.shareDiv').fadeIn();
+    })
+    var f = document.getElementById('file');
+    var data = ['','images/canv.png'];
+    f.addEventListener('change', function(){
+        var imgfile = f.files[0];
+        if(!/image\/\w+/.test(imgfile.type)) {
+            alert("请确保文件类型为图像类型");
+            return false;
+        }
+        oriImg(imgfile);
+    }, false);
+    function oriImg(imgfile){
+        $('.file').fadeOut();
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+        /*var  Orientation;
+        EXIF.getData(imgfile, function() {
+            EXIF.getAllTags(this); 
+            Orientation = EXIF.getTag(this, 'Orientation');
+        });*/
+        var reader = new FileReader();
+        reader.readAsDataURL(imgfile);
+        reader.onload = function(e){
+            $('#cc').attr('src',this.result);
+            ee();
+            /*var image = new Image();
+            image.src = this.result;
+            image.onload = function(){
+                var base64 = null;
+                var mpImg = new MegaPixImage(image);
+                    mpImg.render(canvas, {
+                        maxWidth: 510,
+                        maxHeight: 700,
+                        quality: 0.75,
+                        orientation: Orientation
+                    });
                 
-            }else{
-                //$(".ps").stop();
+                var base64 = canvas;//canvas.toDataURL("image/jpeg", 1);
+                data[0] = base64;
+                draw();
+                canvasEvent();
             }*/
         }
-    };
-//slightMovement.initSlightMovement();
-$(function(){
-    //fontSize();
-    /* window.addEventListener("onorientationchange" in window ? "orientationchange" : "resize", function () {
-        setTimeout(function () {
-            fontSize();
-        }, 100);
-    }, false);*/
-    var wh =  $(window).height();
-    $('body').css('height',wh);
-    if(wh<=960){    
-        //$('.ma').addClass('masca');
     }
-    
-    
-    $('.loading').height(wh).css({'overflow':'hidden'});
-    //$('body').show();
-    loadFn(filelist, function(n) {
-        $('.loadingpercent').html(n+"%");
-    }, function() {
-        fade('.loading','out');
-        //$('.search-page').show();
-        fade('.cover','in');
-        coverFn();
-    });
-    $('.explore').on('click',function(){
-        $(this).fadeOut();
-        $('.scan-box,#product,.main').addClass('on');
-        $('.kl').one('webkitAnimationEnd',function(){
-            $('.scan').fadeOut();
-            $('#product .title').addClass('on');
-            $('.view').fadeIn();
-            $('.arrow').fadeIn();
-            $('#scan-product').removeClass('swiper-no-swiping');
-        });
+    function draw(x,yrotate,scale){
+        var c=document.getElementById('canvas'),
+            ctx=c.getContext('2d'),
+            len=data.length;
+        var x = x||0;
+        var y = y||0;
+        var scale = scale || 1;
+        var rotate = rotate || 0;
+        var base64;
+        //ctx.clearRect(0, 0, canvas.width, canvas.height);
+        /*ctx.clearRect(0,0,c.width,c.height);
+        ctx.fillStyle='#fff';
+        ctx.fill();*/
+        /*var img=new Image;
+        img.src=data[1];
+        img.onload=function(){
+            ctx.drawImage(img,0,0,c.width,c.height);
+        }*/
+        ctx.save();
+        ctx.clearRect( 0, 0, c.width, c.height);
+        //ctx.translate( clientWidth / 2 , clientHeight / 2 );
+        ctx.rotate( rotate );
+        ctx.scale( scale, scale );
+        //ctx.drawImage( img, -img.width / 2, -img.height / 2 );
         
-    })
+        function drawing(n){
+            if(n == 0){
+                ctx.drawImage(data[0],x,y,c.width,c.height);
+                ctx.restore();
+                //drawing(1);
+            }else if(n == 1){
+                /*var img=new Image;
+                img.src=data[n];
+                img.onload=function(){*/
+                    //ctx.drawImage(img,0,0,c.width,c.height);
+                    //drawing(2);
+                //}
+            }/*else{
+                //保存生成作品图片
+                base64 = c.toDataURL("image/jpeg",1);
+                $('.sharebtn').fadeIn();
+                //uploadPic(JSON.stringify(base64))
+                //fn();
+            }*/
+        }
+        drawing(0);
+    }
+    function ee(){
+        var reqAnimationFrame = (function () {
+            return window[Hammer.prefixed(window, 'requestAnimationFrame')] || function (callback) {
+                window.setTimeout(callback, 1000 / 60);
+            };
+        })();
+
+        var screen = document.querySelector(".upload-page .content");
+        var el = document.querySelector("#cc");
+
+        var START_X = 0;//Math.round((screen.offsetWidth - el.offsetWidth) / 2);
+        var START_Y = 0;//Math.round((screen.offsetHeight - el.offsetHeight) / 2);
+        var sX = 0;
+        var sY = 0;
+        var ticking = false;
+        
+        var timer;
+
+        var mc = new Hammer.Manager(el);
+
+        mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
+
+        /*mc.add(new Hammer.Swipe()).recognizeWith(mc.get('pan'));*/
+        mc.add(new Hammer.Rotate({ threshold: 0 })).recognizeWith(mc.get('pan'));
+        mc.add(new Hammer.Pinch({ threshold: 0 })).recognizeWith([mc.get('pan'), mc.get('rotate')]);
+
+        /*mc.add(new Hammer.Tap({ event: 'doubletap', taps: 2 }));
+        mc.add(new Hammer.Tap());*/
+
+        mc.on("panstart", onPan);
+        mc.on("panmove", onPanmove);
+        mc.on("rotatestart rotatemove", onRotate);
+        mc.on("pinchstart pinchmove", onPinch);
+        /*mc.on("swipe", onSwipe);
+        mc.on("tap", onTap);
+        mc.on("doubletap", onDoubleTap);*/
+
+        /*mc.on("hammer.input", function(ev) {
+            if(ev.isFinal) {
+                //resetElement();
+            }
+        });*/
+
+        function logEvent(ev) {
+            //el.innerText = ev.type;
+        }
+
+        function resetElement() {
+            el.className = 'animate';
+            transform = {
+                translate: { x: START_X, y: START_Y },
+                scale: 1,
+                angle: 0,
+                rx: 0,
+                ry: 0,
+                rz: 0
+            };
+            requestElementUpdate();
+        }
+
+        function updateElementTransform() {
+            var value = [
+                'translate3d(' + transform.translate.x + 'px, ' + transform.translate.y + 'px, 0)',
+                'scale(' + transform.scale + ', ' + transform.scale + ')',
+                'rotate3d('+ transform.rx +','+ transform.ry +','+ transform.rz +','+  transform.angle + 'deg)'
+            ];
+
+            value = value.join(" ");
+            el.style.webkitTransform = value;
+            el.style.mozTransform = value;
+            el.style.transform = value;
+            ticking = false;
+        }
+
+        function requestElementUpdate() {
+            if(!ticking) {
+                reqAnimationFrame(updateElementTransform);
+                ticking = true;
+            }
+        }
+
+        function onPan(ev) {
+            el.className = '';
+                sX =  -transform.translate.x + ev.deltaX,
+                sY =  -transform.translate.y + ev.deltaY
+
+           /* logEvent(ev);
+            requestElementUpdate();*/
+        }
+        function onPanmove(ev) {
+            el.className = '';
+            transform.translate = {
+                x: -sX + ev.deltaX,
+                y: -sY + ev.deltaY
+            };
+
+            logEvent(ev);
+            requestElementUpdate();
+        }
+
+        var initScale = 1;
+        function onPinch(ev) {
+            if(ev.type == 'pinchstart') {
+                initScale = transform.scale || 1;
+            }
+
+            el.className = '';
+            transform.scale = initScale * ev.scale;
+
+            logEvent(ev);
+            requestElementUpdate();
+        }
+
+        var initAngle = 0;
+        function onRotate(ev) {
+            if(ev.type == 'rotatestart') {
+                initAngle = transform.angle || 0;
+            }
+
+            el.className = '';
+            transform.rz = 1;
+            transform.angle = initAngle + ev.rotation;
+
+            logEvent(ev);
+            requestElementUpdate();
+        }
+
+        function onSwipe(ev) {
+            var angle = 50;
+            transform.ry = (ev.direction & Hammer.DIRECTION_HORIZONTAL) ? 1 : 0;
+            transform.rx = (ev.direction & Hammer.DIRECTION_VERTICAL) ? 1 : 0;
+            transform.angle = (ev.direction & (Hammer.DIRECTION_RIGHT | Hammer.DIRECTION_UP)) ? angle : -angle;
+
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                resetElement();
+            }, 300);
+
+            logEvent(ev);
+            requestElementUpdate();
+        }
+
+        function onTap(ev) {
+            transform.rx = 1;
+            transform.angle = 25;
+
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                resetElement();
+            }, 200);
+
+            logEvent(ev);
+            requestElementUpdate();
+        }
+
+        function onDoubleTap(ev) {
+            transform.rx = 1;
+            transform.angle = 80;
+
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                resetElement();
+            }, 500);
+
+            logEvent(ev);
+            requestElementUpdate();
+        }
+
+        resetElement();
+    }
+    function canvasEvent(){
+        //创建一个新的hammer对象并且在初始化时指定要处理的dom元素
+         var harmmer = new Hammer(document.getElementById("canvas"));
+         harmmer.startScale = harmmer.initScale = 1;
+         harmmer.startRotate = harmmer.initRotate = 0;  
+        harmmer.initX = harmmer.startX = 0;
+        harmmer.maxW = 510;
+         harmmer.get("rotate").set({ enable: true });
+         harmmer.get("pinch").set({ enable: true });
+
+        harmmer.on("pinchstart rotatestart panstart", function(e) {
+            harmmer.startScale = harmmer.startScale || 1;
+            harmmer.initScale = harmmer.startScale || 1;
+            harmmer.startRotate = harmmer.startRotate || 0;
+            harmmer.initRotate = harmmer.startRotate || 0;
+            harmmer.initX = harmmer.startX || 0;
+        });
+
+        harmmer.on("pinchout rotatemove panmove", function(e) {
+            harmmer.startScale = harmmer.initScale + (e.scale - 1); // 使用toFixed可能会导致不缩放，比如保留两位小数，可能计算出来的还是那个值
+            harmmer.startRotate = harmmer.initRotate + e.rotation;
+            if(harmmer.maxW > 0){
+                harmmer.startX = harmmer.initX + e.deltaX
+            }
+            setTimeout(function(){
+                draw(left,top,e.rotation,harmmer.startScale)
+            },20);              
+        });
+
+        harmmer.on("pinchin rotatemove", function(e) {
+            harmmer.startScale = harmmer.initScale - (1 - e.scale);
+            harmmer.startRotate = harmmer.initRotate + e.rotation;
+            if(harmmer.startScale <= 0.5) {
+                harmmer.startScale = 0.5;
+            };
+
+            setTimeout(function(){
+                draw(left,top,e.rotation,harmmer.startScale)
+            },20);
+        });
+        /*harmmer.on("rotatestart", function(e) {
+            harmmer.startRotate = harmmer.startRotate || 0;
+            harmmer.initRotate = harmmer.startRotate || 0;
+        });
+
+        harmmer.on("rotatemove", function(e) {
+            harmmer.startRotate = harmmer.initRotate + e.rotation;
+            setTimeout(function(){
+                draw(harmmer.startRotate,harmmer.startScale)
+            },20);
+            //harmmer.html(e.rotation);
+            //$("#f").html($("#f").html() + e.rotation + "\n");
+        });*/
+
+            /*harmmer.on("pinchmove", function(e) {
+                pinchBox.css({
+                    "color" : "#fff",
+                    "background" : "#75845c"
+                });
+                
+            });
+
+            harmmer.on("pinchend", function(e) {
+                pinchBox.css({
+                    "color" : "#333",
+                    "background" : "#ccc"
+                });
+            });*/
+
+        var cc = document.getElementById('canvas');
+        var left = 0,top = 0;
+        cc.addEventListener('touchstart', function(e){
+            var startX = 0,startY = 0,currentX = 0,currentY = 0,move = false;
+            startX = e.touches[0].pageX - left;
+            startY = e.touches[0].pageY - top;
+            move = true;
+            cc.addEventListener('touchmove', function(ev){
+                left = ev.touches[0].pageX - startX;
+                top = ev.touches[0].pageY - startY;
+                setTimeout(function(){
+                    draw(left,top);
+                },10);
+            }, false);
+        }, false);
+    }
+}
+
+
+//废弃
+function canvasFn(simpleFile){
+    var base64 = '';
+    var canvas = document.getElementById('canvas'),
+    ctx = canvas.getContext('2d'),
+    imgs = 'images/canv.png';
+    ctx.rect(0, 0, canvas.width, canvas.height);
+    function drawing(n){
+        if(n == 0){
+            var reader = new FileReader();
+            reader.readAsDataURL(simpleFile);
+            reader.onload = function(e){
+                /*$('#canvas').hide();
+                $('#cc').attr('src',e.target.result)*/
+                var image = new Image;
+                image.src = e.target.result;
+                image.onload=function(){
+                    ctx.drawImage(image,0,0,canvas.width, canvas.height);
+                    drawing(1); 
+                }
+            }
+        }else if(n==1){
+            var img=new Image;
+            //img.crossOrigin = 'Anonymous'; //解决跨域
+            img.src=imgs;
+            img.onload=function(){
+                ctx.drawImage(img,0,0,510,700); 
+                drawing(2);     
+            }           
+            
+        }else{
+            //保存生成作品图片
+            base64 = canvas.toDataURL("image/jpeg",0.8);
+            //$('#canvas').hide()
+            $('.sharebtn').fadeIn();
+            //console.log(JSON.stringify(base64));
+            //uploadPic(JSON.stringify(base64))
+        }
+    }
+    drawing(0);
+}
+    
+    
+function uploadPic(){
+    $.ajax({
+      type: "POST",
+      url: "savePic.php?rand="+Math.random() ,
+      data: { 
+        name: $('#nickName').val(),
+        mobile: $('#phone').val(),
+        imgBase64: imgString 
+      }
+    }).done(function(o) {
+        var obj = $.parseJSON(o);
+        if(obj.status){ //成功
+            successFn(obj.msg);//id,url
+        }else{ //失败
+            alert(obj.msg);
+            failFn();
+        }
+    }); 
+    //成功  根据返回的图片地址替换分享url
+    function successFn(img){
+        shareData.link = window.location.origin + window.location.pathname + '?fimg='+img+'&fname='+$('#nickName').val()+'&fmobile='+$('#phone').val(); 
+        $('.share').fadeIn();
+    }
+    //失败
+    function failFn(){
+        subf = true;
+        $('#submitForm').html('提交');
+    }
+
+}
+var wh =  $(window).height();
+$('body').css('height',wh);
+
+$('.loading').height(wh).css({'overflow':'hidden'});
+load(function(){
+    initSwiper();
+    //blingFn.testplay();
+    //audio = new Audio();
+    //audio.init();
+});
+function Audio(){
+    this.aud = document.querySelector('.audio');
+    this.audio = document.querySelector('.audio audio');
+}
+Audio.prototype = {
+    init:function(){
+        this.aud.style.display = 'block';
+        this.eventFn();
+        this.autoplay();
+    },
+    autoplay:function(){
+        var _this = this;
+        _this.audio.play();
+        _this.aud.classList.add('on');
+    },
+    play:function(){
+        var _this = this;
+        if(_this.audio.pause) {
+            _this.audio.play();
+            this.aud.classList.add('on');
+        }
+    },
+    pause:function(){
+        var _this = this;
+        if(_this.audio.play){
+             _this.audio.pause();
+             this.aud.classList.remove('on');
+        }
+    },
+    eventFn:function(){
+        var _this = this;
+        _this.aud.addEventListener('touchstart', function(){
+            if(this.classList.contains('on')){
+                _this.pause();
+            }else{
+                _this.play();
+            }
+        }, false);
+    }
+}
+/**
+ * 定制音乐
+ * @return {[type]} [description]
+ */
+var blingFn = {
+    ad: document.querySelector('.bling audio'),
+    init: function(){
+        //audio.pause();
+        this.ad.play();
+        ////blingFn.eventInit();
+    },
+    m1play:function(){
+        document.querySelector('.bling #m1').play();
+    },
+    m2play:function(){
+        document.querySelector('.bling #m2').play();
+    },
+    m3play:function(){
+        document.querySelector('.bling #m3').play();
+    },
+    m4play:function(){
+        document.querySelector('.bling #m4').play();
+    },
+    testplay:function(){
+        var _this = this;
+        for(var i=0;i<_this.ad.length;i++){
+            _this.ad[i].play();
+            _this.ad[i].pause();
+        }
+    },
+    eventInit: function(){
+        this.ad.addEventListener('ended', blingFn.endContr, false);
+    },
+    endContr: function(){
+        //audio.play();
+        this.ad.pause();
+    }
+}
+//share
+$(function(){
+    $.getJSON('http://m.cosmopolitan.com.cn/files/eventapi.php?c=Cosmom_Jssdk&type=json&url='+String(window.location.href),function(data){
+        wx.config({
+          debug: false,
+          appId: data.appId,
+          timestamp: data.timestamp,
+          nonceStr: data.nonceStr,
+          signature: data.signature,
+          jsApiList: [
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'onMenuShareQQ',
+            'onMenuShareWeibo',
+            'previewImage'
+          ]
+      });
+    });
+});
+    
+wx.ready(function () {
+    wx.error(function(res){
+        //console,log(res);
+        // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+
+    });
+
+    wx.checkJsApi({
+        jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+        success: function(res) {
+            // 以键值对的形式返回，可用的api值true，不可用为false
+            // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+        }
+    });
+
+    wx.onMenuShareAppMessage(shareData);
+    wx.onMenuShareTimeline(shareData);
+    wx.onMenuShareQQ(shareData);
+    wx.onMenuShareWeibo(shareData);
 });
