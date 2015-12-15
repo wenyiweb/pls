@@ -100,8 +100,33 @@ function initSwiper(){
 }
 function swiperEventInit(){
 	var f = true;
-	_$('#cover').swipeRight(function(e){
-		$('#cover .bg1,#cover .dm').addClass('on');
+	_$('#cover,.jk').swipeRight(function(e){
+		$('.jk,#cover .dm').addClass('on');
+		$('.jk').on('webkitTransitionEnd',function(){
+			if(f){
+				f = false;
+				$('#cover').hide();
+				$('.jk').addClass('onon');
+			}else{
+				$('.jk #jkn').hide();
+				$('#jj').css('opacity',1);
+				$('#eng').fadeIn(function(){
+					$('#jj').css({
+						'-webkit-transform':'translate3d(-'+(2610-640)+'px,0,0)'
+					});
+					blingFn.m1play();
+					$('#page1').addClass('first');
+				});
+				/*setTimeout(function(){
+					$('#jj').css({
+						'-webkit-transform':'translate3d(-4179px,0,0)'
+					});
+					blingFn.m1play();
+					$('#page1').addClass('first');
+				},10);*/
+			}
+		})
+		/*$('#cover .bg1,#cover .dm').addClass('on');
 		$('#cover .bg1').on('webkitTransitionEnd',function(){
 			if(f){
 				f = false;
@@ -114,7 +139,7 @@ function swiperEventInit(){
 				blingFn.m1play();
 				$('#page1').addClass('first');
 			}
-		})
+		})*/
 	})
 	var page = 1;
 	$('#jj').on('webkitTransitionEnd',function(){
@@ -132,7 +157,7 @@ function swiperEventInit(){
 			blingFn.m1play();
 			swiper.slidePrev();
 			$('#jj').css({
-					'-webkit-transform':'translate3d(-1815px,0,0)'
+					'-webkit-transform':'translate3d(-'+(2610-640*2)+'px,0,0)'
 			});
 		})
 	});
@@ -152,7 +177,7 @@ function swiperEventInit(){
 				blingFn.m1play();
 				swiper.slidePrev();
 				$('#jj').css({
-						'-webkit-transform':'translate3d(-1175px,0,0)'
+						'-webkit-transform':'translate3d(-'+(2610-640*3)+'px,0,0)'
 				});
 			})
 		})
@@ -173,7 +198,7 @@ function swiperEventInit(){
 				blingFn.m1play();
 				swiper.slidePrev();
 				$('#jj').css({
-						'-webkit-transform':'translate3d(-535px,0,0)'
+						'-webkit-transform':'translate3d(-'+(2610-640*4)+'px,0,0)'
 				});
 			})
 			
@@ -221,6 +246,7 @@ function swiperEventInit(){
 }
 function createImg(){
 	$('.sharebtn').on('click',function(){
+		$('.jk').fadeOut();
 		$('#swiper').addClass('out');
 		$('.shareDiv').addClass('in');
 	})
