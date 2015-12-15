@@ -3,108 +3,51 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="keywords" content="前端老徐、外号老徐、老徐博客、老徐主页、前端工程师、web前端、loveqiao、html5、css3、jquery">
-<meta name="description" content="一个前端工作者的学习笔记">
+<script>
+		var phoneWidth =  parseInt(window.screen.width);
+		var phoneScale = phoneWidth/640;
+		var ua = navigator.userAgent;
+		if (/Android (\d+\.\d+)/.test(ua)){
+			var version = parseFloat(RegExp.$1);
+			if(version>2.3){
+				document.write('<meta name="viewport" content="width=640, minimum-scale = '+phoneScale+', maximum-scale = '+phoneScale+', target-densitydpi=device-dpi">');
+			}else{
+				document.write('<meta name="viewport" content="width=640, target-densitydpi=device-dpi">');
+			}
+		} else {
+			document.write('<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">');
+		}
+		document.addEventListener('touchmove', function(e){
+			e.preventDefault();
+		},false);
+	</script>
 <title>Html5 Canvas 实现图片合成</title>
-<link rel="stylesheet" href="http://www.loveqiao.com/css/public.css">
+<link rel="stylesheet" href="css/style.css">
 <style>
 img{ border:solid 1px #ddd;}
 </style>
 </head>
 
 <body>
-<div align="center">
-<img src="img1.png" width="300">
-<img src="img2.png" width="300">
-<img src="img3.png" width="300">
-<img src="img4.png" width="300">
-</div>
-<div id="imgBox" align="center">
-    <input type="button" value="一键合成" onClick="hecheng()">
-</div>
-<input type="file" id="file">
-<canvas id="canvas"></canvas>
-<script type="text/javascript" src="js/jquery.js"></script>
-<script>
-/*
-   @作者：外号老徐
-   @邮箱：442413729@qq.com
-   @网址：http://www.loveqiao.com
-*/
-function hecheng(){
-	draw(function(){
-		document.getElementById('imgBox').innerHTML='<p style="padding:10px 0">合成图片成功！可以鼠标另存图片查看我是否是一张图片~~！</p><img src="'+base64[0]+'">';
-	})	
-}
-var simpleFile;
-	document.getElementById('file').addEventListener('change',function(){
-		simpleFile = document.getElementById("file").files[0];
-		var c=document.getElementById('canvas'),
-		ctx=c.getContext('2d');
-		c.width=290;
-	c.height=290;
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	var img = new Image;
-	var reader = new FileReader();
-    reader.readAsDataURL(simpleFile);
-    reader.onload = function(e){
-    	alert(999)
-		img.src = this.result;
-		img.onload=function(){
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			ctx.drawImage(img,0,0,290,290);
-			hecheng();
-		}
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		ctx.drawImage(img,0,0,290,290);
-		hecheng();
-	}
-	}, false);
-//var data=['http://www.loveqiao.com/dom/html5css3/hecheng/img1.png','img2.png','img3.png','img4.png'],base64=[];
-function draw(fn){
-	//var c=document.createElement('canvas'),
-	var c=document.getElementById('canvas'),
-		ctx=c.getContext('2d'),
-		len//=data.length;
-	c.width=290;
-	c.height=290;
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	//ctx.rect(0,0,c.width,c.height);
-	//ctx.fillStyle='rgba(0,0,0,0)';
-	//ctx.fill();
-	
-	function drawing(n){
-		if(n==0){
-			var img = new Image;
-			img.src = document.getElementById("file").files[0].value;
-			var reader = new FileReader();
-	        reader.readAsDataURL(simpleFile);
-	        reader.onload = function(e){
-	        	console.log(e.target.result)
-				img.src = e.target.result;
-				//ctx.clearRect(0, 0, canvas.width, canvas.height);
-				ctx.drawImage(img,0,0,290,290);
-				drawing(1);
-			}
-		}else if(n<len&&n>0){
-			var img=new Image;
-			//img.crossOrigin = 'Anonymous'; //解决跨域
-			img.src=data[n];
-			img.onload=function(){
-				ctx.drawImage(img,0,0,290,290);
-				drawing(n+1);//递归
-			}
-		}else{
-			//保存生成作品图片
-			base64.push(c.toDataURL("image/jpeg",0.8));
-			console.log(JSON.stringify(base64));
-			//fn();
-		}
-	}
-	drawing(0);
-}
-</script>
-<script src="http://cdn.loveqiao.com/jquery.js"></script>
-<script src="http://www.loveqiao.com/js/public.js"></script>
+<div class="upload-page ab">
+		<div class="xk ab" style="background:none;">
+			<div class="content content1 ab" style="background:#ccc;">
+				<input type="file" id='file' class="file ab" accept="image/*" capture="camera" >
+				<div type="file" class='file ab'></div>
+				<h2 id="hh"></h2>
+				<img src="" id="cc" style="max-width:510px; touch-action: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); transform: translate3d(30px, 94px, 0px) scale(1.4, 1.4) rotate3d(0, 0, 1, 34deg);">
+				<img src="" id="cc2" style="max-width:510px;">
+				<!-- <canvas id="canvas" width="510" height="700"></canvas> -->
+			</div>
+		</div>
+		<div class="sharebtn" style="background:none;display:block;bottom:auto;backgorund-color:#ccc;font-size:30px;line-height:67px;text-align:center;">生成</div>
+	</div>
+	<script src="http://cdn.bootcss.com/hammer.js/2.0.4/hammer.js"></script>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/zepto.min.js"></script>
+	<script type="text/javascript" src="js/exif.js" ></script>
+	 <script type="text/javascript" src="js/mobileBUGFix.mini.js" ></script>
+	<script type="text/javascript" src="js/swiper.js"></script>
+	<script type="text/javascript" src="js/test.js"></script>
 </body>
 </html>
