@@ -83,7 +83,7 @@
 						<div type="file" class='file ab'></div>
 						<img src="images/canv.png" id="cc2" style="max-width:100%;position:absolute;z-index:2;">
 						<img src="" id="cc" style="max-width:100%;position:absolute;z-index:1;">
-						<!-- <canvas id="canvas" width="510" height="700"></canvas> -->
+						<div class="mask ab"></div>
 					</div>
 				</div>
 				<div class="sharebtn"></div>
@@ -123,10 +123,12 @@
 						<div class="girl ab">
 							<img src="images/girl2.png" alt="">
 						</div>
+						<div class="g g3 ab"></div>
+						<div class="g g4 ab"></div>
 					</div>
 					<div class="content content2 ab">
 						<div class="bg wm ab">
-							<img src="images/3-2.jpg" alt="">
+							<img src="images/3-2.gif" alt="">
 						</div>
 						<div class="mscontent ab">
 							<div class="ms ms1"></div>
@@ -146,8 +148,8 @@
 							<img src="images/2-1.jpg" alt="">
 						</div>
 						<div class="girl ab">
-							<img src="images/girl.png" alt="">
-						</div>
+							<img src="images/girl.png" alt="">							
+						</div>						
 					</div>
 					<div class="content content2 ab">
 						<div class="bg wm ab">
@@ -168,6 +170,8 @@
 					<div class="content content1 ab">
 						<div class="bg dp ab">
 							<img src="images/1-1.jpg" alt="">
+							<div class="g g1 ab"></div>
+							<div class="g g2 ab"></div>
 						</div>
 						<div class="mscontent ab">
 							<div class="ms ms1"></div>
@@ -188,10 +192,12 @@
 		<div class="share-tip">
 			<img src="images/share-tip.png" alt="">
 		</div>
+		<div class="g"></div>
 	</div>
 	<div id="dialog">
-		<a href="javascript:;" class="close" onClick="$('.hand-tip,.zzdj').addClass('zz');$('#dialog').fadeOut();"></a>
-		<div class="dialog-tip"></div>
+		<a href="javascript:;" class="close" onClick="$('.hand-tip').show();$('.hand-tip,.zzdj').addClass('zz');$('#dialog').fadeOut();"></a>
+		<div class="dialog-tip dialog-tip1"></div>
+		<div class="dialog-tip dialog-tip2"></div>
 		<div class="swiper-container ifcontent">
 	        <div class="swiper-wrapper">
 	            <div class="swiper-slide">
@@ -211,10 +217,10 @@
 		<audio src="media/jiaojuan.mp3" preload="auto" id="m1" loop></audio>
 		<audio src="media/dazi.mp3" preload="auto" id="m2" loop></audio>
 		<audio src="media/message.mp3" preload="auto" id="m3" loop></audio>
-		<!-- <audio src="media/cammera.mp3" preload="auto" id="m4"></audio> -->
+		<audio src="media/cammera.mp3" preload="auto" id="m4"></audio>
 	</div>
 	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-	<script src="js/hammer.js"></script>
+	<script _src="js/hammer.js"></script>
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/zepto.min.js"></script>
 	<script type="text/javascript" src="js/swiper.js"></script>

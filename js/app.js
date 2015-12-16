@@ -204,7 +204,8 @@ function swiperEventInit(){
 	$('#page3 .content1').one('tap',function(){
 		$('#page3 .content1').addClass('out');
 		$('#page3 .content1 .dp').one('webkitTransitionEnd',function(){
-			$('#page3 .tip2').fadeOut();			
+			$('#page3 .tip2').fadeOut();
+			$('#page3 .content1 .g').addClass('out').fadeOut();			
 			$('#page3 .content1 .girl').fadeOut(function(){
 				$('#page3 .content1').hide();
 			});
@@ -233,7 +234,8 @@ function swiperEventInit(){
 		blingFn.m2pause();
 		setTimeout(function(){
 			blingFn.m3play();
-			$('#cwpb,#page4 .mscontent').css('opacity',0);
+			$('#page4 .mscontent').fadeOut();
+			$('#cwpb').css('opacity',0);
 			$('.hand-tip').addClass('on');
 			$('#cwpb').one('webkitTransitionEnd',function(){
 				blingFn.m3pause();
@@ -243,21 +245,30 @@ function swiperEventInit(){
 	});
 	$('.phone').on('click',function(){
 		if($(this).hasClass('on')){
+			$('.hand-tip').fadeOut();
 			$('#cwpb2').css('opacity',0);
 			$('.phone').fadeOut();
 			$('#cwpb2').one('webkitTransitionEnd',function(){
-				$('#dialog').fadeIn(function(){
-					setTimeout(function(){
-						$('.dialog-tip').fadeIn();
-					},2000)
-					var swiper2 = new Swiper('.ifcontent.swiper-container', {
-						scrollbar: '.swiper-scrollbar',
-				        direction: 'vertical',
-				        slidesPerView: 'auto',
-				        freeMode: true,
-				    });
+				setTimeout(function(){
+					$('#dialog').fadeIn(function(){
+						setTimeout(function(){
+							$('.dialog-tip2').fadeOut();
+							$('.dialog-tip1').fadeIn(function(){
+								$('.dialog-tip1').addClass('on');
+							});
+						},3000)
+						$('.dialog-tip1').on('webkitAnimationEnd',function(){
+							$('.dialog-tip1').fadeOut();
+						})
+						var swiper2 = new Swiper('.ifcontent.swiper-container', {
+							scrollbar: '.swiper-scrollbar',
+					        direction: 'vertical',
+					        slidesPerView: 'auto',
+					        freeMode: true,
+					    });
 
-				});
+					});
+				},1200)
 			});
 		}
 	});
@@ -279,9 +290,20 @@ function swiperEventInit(){
 }
 function createImg(){
 	$('.sharebtn').on('click',function(){
-		$('.jk').fadeOut();
-		$('#swiper').addClass('out');
-		$('.shareDiv').addClass('in');
+		$('.upload-page .mask').show();
+		setTimeout(function(){
+			blingFn.m4play();
+			$('.upload-page .mask').addClass('on');
+		},10);
+		$('.upload-page .mask').one('webkitTransitionEnd',function(){
+			$(this).removeClass('on');
+		})
+		setTimeout(function(){
+			$('.upload-page .mask').fadeOut();
+			$('#swiper,.jk').addClass('out');
+			$('.jk').css('opacity',0);
+			$('.shareDiv').addClass('in');
+		},2200);
 	})
 	var f = document.getElementById('file');
 	//var data = ['','images/canv.png'];
