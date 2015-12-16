@@ -57,7 +57,8 @@ function  load(cb){
   }
 
   function hide(){
-  	$('#cover').css('opacity',1);
+  	$('#cover,.jk').css('opacity',1);
+  	$('#cc2').hide();
   	fade('.loading','out',function(){
   		cb&&cb();
   	});
@@ -110,20 +111,20 @@ function swiperEventInit(){
 			}else{
 				$('.jk #jkn').hide();
 				$('#jj').css('opacity',1);
-				$('#eng').fadeIn(function(){
+				/*$('#eng').fadeIn(function(){
 					$('#jj').css({
 						'-webkit-transform':'translate3d(-'+(2610-640)+'px,0,0)'
 					});
 					blingFn.m1play();
 					$('#page1').addClass('first');
-				});
-				/*setTimeout(function(){
+				});*/
+				setTimeout(function(){
 					$('#jj').css({
-						'-webkit-transform':'translate3d(-4179px,0,0)'
+						'-webkit-transform':'translate3d(-'+(2610-640)+'px,0,0)'
 					});
 					blingFn.m1play();
 					$('#page1').addClass('first');
-				},10);*/
+				},10);
 			}
 		})
 		/*$('#cover .bg1,#cover .dm').addClass('on');
@@ -144,14 +145,25 @@ function swiperEventInit(){
 	var page = 1;
 	$('#jj').on('webkitTransitionEnd',function(){
 		blingFn.m1pause();
+		
 		if(page == 1){
-
+			$('#eng').fadeIn();
+			blingFn.m2play();
 			$('#cover').fadeOut();
-			$('#jh').css('opacity',1);
-			//第一屏动画
+			page = 2;
+		}else if(page==2){
+			page = 3;
+		}else if(page == 3){
+			page = 4;
+		}else if(page == 4){
+			blingFn.m2play();
+			page = 5;
+		}else if(page == 5){
+			page = 6;
 		}
 	});
 	$('#page1 .ms.ms2').one('webkitTransitionEnd',function(){
+		blingFn.m2pause();
 		$('#page1 .tip').fadeIn();
 		_$('#page1').swipeRight(function(){
 			blingFn.m1play();
@@ -168,10 +180,16 @@ function swiperEventInit(){
 			$('#page2 .tip2').fadeOut();			
 			$('#page2 .content1 .girl').fadeOut(function(){
 				$('#page2 .content1').hide();
+				
 			});
 		})
 		$('#page2 .content2').addClass('in');
+		var timmer = setTimeout(function(){
+			clearTimeout(timmer);
+			blingFn.m2play();
+		},3000)
 		$('#page2 .ms.ms3').one('webkitTransitionEnd',function(){
+			blingFn.m2pause();
 			$('#page2 .tip').fadeIn();
 			_$('#page2').swipeRight(function(){
 				blingFn.m1play();
@@ -192,7 +210,12 @@ function swiperEventInit(){
 			});
 		})
 		$('#page3 .content2').addClass('in');
+		var timmer = setTimeout(function(){
+			clearTimeout(timmer);
+			blingFn.m2play();
+		},3000)
 		$('#page3 .ms.ms4').one('webkitTransitionEnd',function(){
+			blingFn.m2pause();
 			$('#page3 .tip').fadeIn();
 			_$('#page3').swipeRight(function(){
 				blingFn.m1play();
@@ -207,10 +230,13 @@ function swiperEventInit(){
 	});
 	//电话铃声
 	$('#page4 .ms.ms4').one('webkitTransitionEnd',function(){
+		blingFn.m2pause();
 		setTimeout(function(){
+			blingFn.m3play();
 			$('#cwpb,#page4 .mscontent').css('opacity',0);
 			$('.hand-tip').addClass('on');
 			$('#cwpb').one('webkitTransitionEnd',function(){
+				blingFn.m3pause();
 				$('.phone').addClass('on');
 			})
 		},1000);
@@ -224,6 +250,13 @@ function swiperEventInit(){
 					setTimeout(function(){
 						$('.dialog-tip').fadeIn();
 					},2000)
+					var swiper2 = new Swiper('.ifcontent.swiper-container', {
+						scrollbar: '.swiper-scrollbar',
+				        direction: 'vertical',
+				        slidesPerView: 'auto',
+				        freeMode: true,
+				    });
+
 				});
 			});
 		}
@@ -253,6 +286,7 @@ function createImg(){
 	var f = document.getElementById('file');
 	//var data = ['','images/canv.png'];
 	f.addEventListener('change', function(){
+		//blingFn.m4play();
 		var imgfile = f.files[0];
 		if(!/image\/\w+/.test(imgfile.type)) {
             alert("请确保文件类型为图像类型");
@@ -483,8 +517,14 @@ var blingFn = {
 	m2play:function(){
 		document.querySelector('.bling #m2').play();
 	},
+	m2pause:function(){
+		document.querySelector('.bling #m2').pause();
+	},
 	m3play:function(){
 		document.querySelector('.bling #m3').play();
+	},
+	m3pause:function(){
+		document.querySelector('.bling #m3').pause();
 	},
 	m4play:function(){
 		document.querySelector('.bling #m4').play();

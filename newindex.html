@@ -81,7 +81,7 @@
 					<div class="content content1 ab">
 						<input type="file" id='file' class="file ab" accept="image/*" capture="camera" >
 						<div type="file" class='file ab'></div>
-						<img src="images/canv.png" id="cc2" style="max-width:100%;position:absolute;z-index:2;display:none;">
+						<img src="images/canv.png" id="cc2" style="max-width:100%;position:absolute;z-index:2;">
 						<img src="" id="cc" style="max-width:100%;position:absolute;z-index:1;">
 						<!-- <canvas id="canvas" width="510" height="700"></canvas> -->
 					</div>
@@ -179,7 +179,10 @@
 			</div>
 		</div>
 		<!-- <img src="images/j1.png" style="position: absolute;left: -418px;top: -40px;z-index:2;opacity:0;" id="jh"> -->
-		<img src="images/jj.png"  style="position: absolute;left:80px;top: 56px;-webkit-transform:translate(-2610px,0);z-index:1;opacity:0;-webkit-transition:-webkit-transform 1.5s linear;" id="jj">
+		<div id="jj" style="width:2945px;height:853px;position: absolute;left:80px;top: 56px;-webkit-transform:translate(-2610px,0);z-index:1;opacity:0;-webkit-transition:-webkit-transform 1.5s linear;">
+			<div style="width:2593px;height:853px;background:url(images/jj3.png) repeat-x;position:absolute;left:0;"></div>
+			<img src="images/bls.png" style="width:352px;position:absolute;left:2593px;">
+		</div>
 	</div>
 	<div class="shareDiv ab">
 		<div class="share-tip">
@@ -189,14 +192,15 @@
 	<div id="dialog">
 		<a href="javascript:;" class="close" onClick="$('.hand-tip,.zzdj').addClass('zz');$('#dialog').fadeOut();"></a>
 		<div class="dialog-tip"></div>
-		<div class="ifcontent">
-			<div class="scroll-body" id="dialogSwiper">
-				<div class="wrapper">
-					<div class="con">
-						
-					</div>
-				</div>
-			</div>
+		<div class="swiper-container ifcontent">
+	        <div class="swiper-wrapper">
+	            <div class="swiper-slide">
+            		<p>
+            			<img src="images/scroll.jpg" style="width:100%">
+            		</p>
+	            </div>
+	        </div>
+	        <div class="swiper-scrollbar"></div>
 		</div>
 	</div>
 	<!--背景音乐
@@ -204,10 +208,10 @@
 		<audio src="media/music.mp3" preload="auto" loop></audio>
 	</div>-->
 	<div class="bling">
-		<audio src="media/jiaojuan.mp3" preload="auto" id="m1" loop></audio><!-- 
-		<audio src="media/m2.mp3" preload="auto" id="m2"></audio>
-		<audio src="media/m3.mp3" preload="auto" id="m3"></audio>
-		<audio src="media/m4.mp3" preload="auto" id="m4"></audio> -->
+		<audio src="media/jiaojuan.mp3" preload="auto" id="m1" loop></audio>
+		<audio src="media/dazi.mp3" preload="auto" id="m2" loop></audio>
+		<audio src="media/message.mp3" preload="auto" id="m3" loop></audio>
+		<!-- <audio src="media/cammera.mp3" preload="auto" id="m4"></audio> -->
 	</div>
 	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 	<script src="js/hammer.js"></script>
