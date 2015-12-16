@@ -241,9 +241,9 @@ body{width:100%;height: 100%;position: relative;max-width: 640px;margin: 0 auto;
 	    top: 0;z-index: 2;
 	}
 	.dialog-tip{width: 93px;height: 88px;background: url(../images/hand.png) no-repeat;display: none;position: absolute;top: 60px;right: 0;
-		&.on{-webkit-animation:translateX 3s 2 forwards ease-in;}
+		&.on{-webkit-animation:translateX 1.5s 2 forwards ease-in;}
 	}
-	.dialog-tip2{top: 50%;margin-top: -88px/$m;-webkit-animation:translateY 3s 2 forwards ease-in;display: block;}
+	.dialog-tip2{top: 50%;margin-top: -88px/$m;-webkit-animation:translateY 1.5s 2 forwards ease-in;display: block;}
 }
 /*animation*/
 @keyframes circle{
