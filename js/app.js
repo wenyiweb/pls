@@ -330,7 +330,7 @@ function uploadPic(submitData){
 					$('.touchtip').fadeOut(function(){
 						$('.sharebtn').fadeIn();
 					});
-				},2000)
+				},3500)
 				ee();
 				//var attstr= '<img src="'+data.url+'" id="">'; 
 				//$(".imglist").append(attstr);
